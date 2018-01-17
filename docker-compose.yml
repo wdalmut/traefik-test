@@ -1,0 +1,19 @@
+version: '3.4'
+services:
+  traefik:
+    image: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+    ports:
+      - 8080:8080
+      - 80:80
+  web:
+    image: php:7.2
+    command: sh -c 'echo "internal" > index.php && php -S 0:8080 -t .'
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.priority=10"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.rule=Host:test.127.0.0.1.xip.io"

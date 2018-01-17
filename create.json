@@ -1,0 +1,31 @@
+{
+  "frontends": {
+    "frontend-Host-test-localhost": {
+      "priority": 11,
+      "passHostHeader": true,
+      "routes": {
+        "route-frontend-Host-test-localhost": {
+          "rule": "Host:test.127.0.0.1.xip.io"
+        }
+      },
+      "backend": "backend-test",
+      "entryPoints": [
+        "http"
+      ]
+    }
+  },
+  "backends": {
+    "backend-test": {
+      "loadBalancer": {
+        "method": "wrr"
+      },
+      "servers": {
+        "corley": {
+          "weight": 1,
+          "url": "http://192.168.0.3:8082"
+        }
+      }
+    }
+  }
+}
+
