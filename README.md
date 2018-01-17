@@ -10,11 +10,23 @@ docker-compose up -d
 
 ### Override a service
 
-First of all start a local service
+Get your IP address
+
+```
+MYIP=$(ip addr show | grep -E '^\s*inet' | grep -m1 global | awk '{ print $2 }' | sed 's|/.*||')
+```
+
+Start a local service
 
 ```sh
 echo "EXTERNAL" > index.php
 php -S 0:8082 -t .
+```
+
+Update the JSON configuration
+
+```sh
+json -I -f create.json -e "this.backends[\"backend-test\"].servers.corley.url=\"http://$MYIP:8082/\""
 ```
 
 Then override with priority a running service
